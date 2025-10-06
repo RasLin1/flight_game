@@ -26,12 +26,7 @@ def select_closest_airports(amount, player_cordinates):
 
 def move(entity, icao):
     updated_airport = creatures.move_entity(entity, select_specific_airport(icao))
-    if updated_airport == False:
-        print("Error in moving plane, possibly invalid icao")
-        return False
-    else:
-        print(f"New ICAO-code: {updated_airport['location']}")
-        return updated_airport
+    return updated_airport
 
 def get_cordinates(airport):
     return  (airport["lat"], airport["lon"])
