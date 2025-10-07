@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e7435490-9c1a-4df4-ba31-66473bdf788b" name="Changes" comment="Pitäisi olla toimiva yhteys skriptti. Tein kaikille muos omat kansiot niiden skripteille">
-      <change beforePath="$PROJECT_DIR$/.idea/flight_game.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/flight_game.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/JesseMod/CreatureJump.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/JesseMod/Yhteys.py" beforeDir="false" afterPath="$PROJECT_DIR$/JesseMod/Yhteys.py" afterDir="false" />
     </list>
@@ -24,7 +24,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="Yhteys" />
+        <entry key="$PROJECT_DIR$" value="uuded-funktiot" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -52,19 +52,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Python.Yhteys.executor": "Run",
-    "Python.game.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Python.Yhteys.executor&quot;: &quot;Run&quot;,
+    &quot;Python.creatures.executor&quot;: &quot;Run&quot;,
+    &quot;Python.game.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Python.Yhteys">
     <configuration name="Olio-Ase" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="FlightGame" />
@@ -117,6 +118,8 @@
       <list>
         <item itemvalue="Python.Yhteys" />
         <item itemvalue="Python.Olio-Ase" />
+        <item itemvalue="Python.Yhteys" />
+        <item itemvalue="Python.Olio-Ase" />
       </list>
     </recent_temporary>
   </component>
@@ -151,7 +154,15 @@
       <option name="project" value="LOCAL" />
       <updated>1759387698260</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Pitäisi olla toimiva yhteys skriptti. Tein kaikille muos omat kansiot niiden skripteille">
+      <option name="closed" value="true" />
+      <created>1759754067079</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1759754067079</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -172,8 +183,8 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Pitäisi olla toimiva yhteys skriptti. Tein kaikille muos omat kansiot niiden skripteille" />
     <MESSAGE value="Funktio jolla saa lisätty dataa. Huomio et se data menee suoraan omaan tietokantaan" />
-    <option name="LAST_COMMIT_MESSAGE" value="Funktio jolla saa lisätty dataa. Huomio et se data menee suoraan omaan tietokantaan" />
+    <MESSAGE value="Pitäisi olla toimiva yhteys skriptti. Tein kaikille muos omat kansiot niiden skripteille" />
+    <option name="LAST_COMMIT_MESSAGE" value="Pitäisi olla toimiva yhteys skriptti. Tein kaikille muos omat kansiot niiden skripteille" />
   </component>
 </project>

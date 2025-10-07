@@ -13,6 +13,20 @@ yhteys = mysql.connector.connect (
 
 )
 
+def updatePlayerHealth(Health,Id):
+    sql = f"UPDATE player SET current_health =current_health- %s WHERE player_id = %s"
+    kursori = yhteys.cursor(dictionary=True)
+    kursori.execute(sql,(Health,Id))
+
+    return
+# update the current by entering how much health you wish to remove and specifying Id
+def updatePlayerItem(itemId,playerId):
+    sql = f"Update owned_items SET item_id = %s WHERE player_id =%s"
+    kursori = yhteys.cursor(dictionary=True)
+    kursori.execute(sql,(itemId,playerId))
+
+    return
+#update current active item used by the player
 
 def deleteCreatureData (Id) :
     sql = f"DELETE FROM creature WHERE creature_id = %s"
@@ -63,7 +77,8 @@ def selectItem(Id):
         print(f"Virhe: {err}")
 
 #insertAlienTable(3,"Scytheworm",100,10 )
-selectCreature(3)
+#updateCreature(3,20)
+#electCreature(3)
 #insertItem(1,"Axe",50,"Strong weapon that can cut trough rough exoskeleton")
-selectItem(1)
-#deleteAlienData(3)
+#selectItem(1)
+#deleteCreatureData(3)
