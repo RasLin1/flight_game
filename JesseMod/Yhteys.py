@@ -41,10 +41,10 @@ def insertCreatureTable(Id,Name,Health,Damage):
 # Add desired creature to the database with required parameters
 
    return
-def updateCreature(Id,Health) :
-    sql = f"UPDATE creature SET creature_max_health = creature_max_health-%s WHERE creature_id =%s"
+def updateCreature(Id,Health,playerId) :
+    sql = f"UPDATE game_creatures SET creature_current_health = creature_current_health-%s WHERE creature_id =%s AND player_id = %s"
     kursori= yhteys.cursor(dictionary=True)
-    kursori.execute(sql, (Health,Id))
+    kursori.execute(sql, (Health,Id,playerId))
     # update current health of creature for combat purposes
 
     return
