@@ -28,7 +28,6 @@ def select_random_airport_location():
         cursor = db.cursor(dictionary=True)
         cursor.execute(airport_rand_query, (airport_number,))
         query_return = cursor.fetchone()
-        print("DEBUG random airport:", query_return)
         if query_return:
             return query_return
         else:
@@ -53,22 +52,7 @@ def select_specific_airport(icao):
         print(f"Virhe: {err}")
     cursor.close()
 
-#Ottaa maan koodin ja sen perusteella  hakee sekä palauttaa tiedot
-def select_airports_per_country(country_code):
-    db = db_connection()
-    airport_query = f"SELECT airport.name AS airport_name, airport.ident AS airport_icao, airport.type AS airport_type, airport.latitude_deg AS lat, airport.longitude_deg AS lon, country.name AS country_name FROM airport INNER JOIN country ON airport.iso_country = country.iso_country WHERE airport.iso_country = %s AND airport.type = 'large_airport' AND airport.continent =  'EU'"
-    try: 
-        cursor = db.cursor(dictionary=True)
-        cursor.execute(airport_query, (country_code,))
-        query_return = cursor.fetchall()
-        if query_return:
-            return query_return
-        else:
-            return False
-    except mysql.connector.Error as err:
-        print(f"Virhe: {err}")
-    cursor.close()
-
+#Hakee kaikki lentokentät  tietokannasta
 def select_all_airports():
     db = db_connection()
     airport_query = f"SELECT airport.name AS airport_name, airport.ident AS airport_icao, airport.type AS airport_type, airport.latitude_deg AS lat, airport.longitude_deg AS lon, country.name AS country_name FROM airport INNER JOIN country ON airport.iso_country = country.iso_country WHERE airport.type = 'large_airport' AND airport.continent =  'EU'"
@@ -84,9 +68,8 @@ def select_all_airports():
         print(f"Virhe: {err}")
     cursor.close()
 
-#"airport" tauluun liityvät kyselyt alkavat tästä
-#Arpoo satunnaisen lentokentän  ja  palautta sen
-
+#"event" tauluun liityvät kyselyt alkavat tästä
+#Arpoo satunnaisen tapahtuman ja palautta sen
 def select_random_event():
     db = db_connection()
     event_amount_query = "SELECT COUNT(*) FROM event"

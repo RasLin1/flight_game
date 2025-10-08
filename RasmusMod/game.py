@@ -1,4 +1,4 @@
-from db import select_random_airport_location, select_random_event
+from db import select_random_airport_location, select_random_event, select_specific_airport
 import creatures
 import game_functions
 
@@ -10,14 +10,16 @@ def play():
     monster = creatures.create_entity("Hirviö", select_random_airport_location())
 
     while allow_game:
-        distance = game_functions.current_distance(player['cordinates'], monster['cordinates'])
+        distance = float(game_functions.current_distance(player['cordinates'], monster['cordinates']))
+        if distance == 0.00:
+            print("Located in same airport as monster")
         print(f"{player['name']} located in {player['location_name']} {player['location']} distance to {monster['name']} {distance}km") 
         airports = game_functions.select_closest_airports(5, player['cordinates'])
         for x in airports:
             print(f"Nimi: {x["airport_name"]} | ICAO-koodi: {x["airport_icao"]} | Distance: {x["distance"]}")
         round_action = input("Kirjoita 'S' jos haluat siirtää paikkaa | Kirjoita 'L' jos haluat levätä ").upper()
         if round_action == "S":
-            updated_player = game_functions.move(player, input("Anna lentokentän icao-koodi jonne haluat siirtyä: ").upper())
+            updated_player = creatures.move_entity(player, select_specific_airport(input("Anna lentokentän icao-koodi jonne haluat siirtyä: ").upper()))
             player = updated_player
         elif round_action == "L":
             print("ZZZ...")
