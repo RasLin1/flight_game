@@ -6,8 +6,8 @@ allow_game = True
 
 def play():
     round = 1
-    player = creatures.create_entity("Pelaaja", select_random_airport_location())
-    monster = creatures.create_entity("Hirviö", select_random_airport_location())
+    player = creatures.create_entity("Pelaaja", select_random_airport_location(), 1)
+    monster = creatures.create_entity("Hirviö", select_random_airport_location(), 2)
 
     while allow_game:
         distance = float(game_functions.current_distance(player['cordinates'], monster['cordinates']))

@@ -87,7 +87,27 @@ def select_random_event():
         if query_return:
             return query_return
         else:
-            print("Lentokenttä ei löytynyt")
+            print("Tapahtumaa ei löytynyt")
     except mysql.connector.Error as err:
         print(f"Virhe: {err}")
     cursor.close()
+
+
+#Tästä alkaa pelaajaan liityvät kyselyt
+
+def create_player(name, location):
+    db = db_connection()
+    create_player_query = f"INSERT INTO player (player_name, player_location, fuel, money, max_health, current_health, game_score, game_completed) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+    try: 
+        cursor = db.cursor(dictionary=True)
+        cursor.execute(create_player_query, (name, location, 100, 100, 100, 100, 0, False))
+        db.commit()
+        player_id = cursor.lastrowid
+        if player_id:
+            return True
+        else:
+            return False
+    except mysql.connector.Error as err:
+        print(f"Virhe: {err}")
+    cursor.close()
+    db.close()
