@@ -1,4 +1,4 @@
-from db import create_player, move_player, create_game_monster, move_creature
+from db import create_player, move_player, create_game_creature, move_creature
 
 
 #Luo pelaajan sanakirjana
@@ -21,15 +21,15 @@ def create_entity(name, airport, type):
             }
             return entity
     if type == 2:
-        player = create_game_monster(name, airport["ident"])
-        if player == False:
+        creature = create_game_creature(name, airport["ident"])
+        if creature == False:
             print("Monster creation fail")
             return False
         else:  
             print("Player creation success")
             entity = {
                 "name": name,
-                "id": player,
+                "id": creature,
                 "country": airport["c_name"],
                 "location": airport["ident"],
                 "location_name":airport["a_name"],
@@ -51,16 +51,31 @@ def move_entity(entity, airport, type):
     else:
         if type == 1:
             player = move_player(entity, airport["ident"])
-        if player == True:
-            print("Creature creation success")
-        else:
-            print("Creature creation fail")
-            return entity
-        return {
-            "name": entity["name"],
-            "country": airport["c_name"],
-            "location": airport["ident"],
-            "location_name":airport["a_name"],
-            "cordinates": (airport["lat"], airport["lon"])
-        }
+            if player == True:
+                print("Creature creation success")
+                return {
+                "name": entity["name"],
+                "country": airport["c_name"],
+                "location": airport["ident"],
+                "location_name":airport["a_name"],
+                "cordinates": (airport["lat"], airport["lon"])
+                }
+            else:
+                print("Creature creation fail")
+                return entity
+            
+        elif type == 2:
+            creature = move_creature(entity, airport["ident"])
+            if player == True:
+                print("Creature creation success")
+            else:
+                print("Creature creation fail")
+                return entity
+            return {
+                "name": entity["name"],
+                "country": airport["c_name"],
+                "location": airport["ident"],
+                "location_name":airport["a_name"],
+                "cordinates": (airport["lat"], airport["lon"])
+            }
     
