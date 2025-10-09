@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="e7435490-9c1a-4df4-ba31-66473bdf788b" name="Changes" comment="update">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/StuMod/start.py" beforeDir="false" afterPath="$PROJECT_DIR$/StuMod/start.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StuMod/hypotens.py" beforeDir="false" afterPath="$PROJECT_DIR$/StuMod/hypotens.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -212,7 +212,14 @@
       <option name="presentableId" value="LOCAL−00005" />
       <updated>1759992866704</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL−00006" summary="update">
+      <option name="closed" value="true" />
+      <created>1759997689375</created>
+      <option name="number" value="LOCAL−00006" />
+      <option name="presentableId" value="LOCAL−00006" />
+      <updated>1759997689375</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -240,5 +247,8 @@
     <MESSAGE value="Pitäisi olla toimiva yhteys skriptti. Tein kaikille muos omat kansiot niiden skripteille" />
     <MESSAGE value="update" />
     <option name="LAST_COMMIT_MESSAGE" value="update" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/flight_game$start.coverage" NAME="start Coverage Results" MODIFIED="1759997667923" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/StuMod" />
   </component>
 </project>
