@@ -6,8 +6,9 @@ allow_game = True
 
 def play():
     round = 1
+    probes = []
     #Luo pelaajan sekä hirviön tietokanassa ja säästää tärkeät tiedot muuntaijiin
-    player = creatures.create_entity("Pelaaja", select_random_airport_location(), 1)
+    player = creatures.create_entity(input("Anna pelaajan nimi: "), select_random_airport_location(), 1)
     monsters = []
     for x in range(3):
         entity = creatures.create_entity(f"Ent{x}", select_random_airport_location(), 2)

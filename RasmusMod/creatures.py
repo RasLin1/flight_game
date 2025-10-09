@@ -4,9 +4,9 @@ import random
 
 #Luo pelaajan sanakirjana
 def create_entity(name, airport, type):
-    print(f"DEBUG: create_player() called with name={name}, location={airport["ident"]}")
+    print(f"DEBUG: create_player() called with name={name}, location={airport["airport_icao"]}")
     if type == 1:
-        player = create_player(name, airport["ident"])
+        player = create_player(name, airport["airport_icao"])
         if player == False:
             print("Player creation fail")
             return False
@@ -16,13 +16,14 @@ def create_entity(name, airport, type):
                 "name": name,
                 "id": player,
                 "country": airport["c_name"],
-                "location": airport["ident"],
+                "location": airport["airport_icao"],
                 "location_name": airport["a_name"],
-                "cordinates": (airport["lat"], airport["lon"])
+                "cordinates": (airport["lat"], airport["lon"]),
+                "fuel": 100
             }
             return entity
     elif type == 2:
-        creature = create_game_creature(name, airport["ident"])
+        creature = create_game_creature(name, airport["airport_icao"])
         if creature == False:
             print("Monster creation fail")
             return False
@@ -32,7 +33,7 @@ def create_entity(name, airport, type):
                 "name": name,
                 "id": creature,
                 "country": airport["c_name"],
-                "location": airport["ident"],
+                "location": airport["airport_icao"],
                 "location_name": airport["a_name"],
                 "cordinates": (airport["lat"], airport["lon"])
             }
@@ -49,22 +50,27 @@ def move_entity(entity, airport, type):
             "country": entity["country"],
             "location": entity["location"],
             "location_name": entity["location_name"],
-            "cordinates": entity["cordinates"]
+            "cordinates": entity["cordinates"],
+            "fuel": entity["fuel"]
         }
     else:
         if type == 1:
-            player = move_player(entity, airport["ident"])
+            current_fuel = entity["fuel"] - (float(current_distance(entity["cordinates"], (airport["lat"], airport["lon"])))/100)
+            player = move_player(entity, airport["airport_icao"], current_fuel)
+            print(f"Polttoaine liikeen jälkeen on {current_fuel}")
             if player == True:
-                print("Creature creation success")
+                print("Player movement success")
                 return {
                 "name": entity["name"],
+                "id": entity["id"],
                 "country": airport["c_name"],
-                "location": airport["ident"],
+                "location": airport["airport_icao"],
                 "location_name": airport["a_name"],
-                "cordinates": (airport["lat"], airport["lon"])
+                "cordinates": (airport["lat"], airport["lon"]),
+                "fuel": current_fuel
                 }
             else:
-                print("Creature creation fail")
+                print("Creature movement fail")
                 return entity
             
         elif type == 2:
@@ -85,7 +91,7 @@ def move_entity(entity, airport, type):
                     "name": entity["name"],
                     "id": entity["id"],
                     "country": airport["c_name"],
-                    "location": airport["ident"],
+                    "location": airport["airport_icao"],
                     "location_name": airport["a_name"],
                     "cordinates": (airport["lat"], airport["lon"])
                 }
@@ -99,7 +105,7 @@ def creature_movement(cordinates):
   #random value to pick a random airport from the close airports
    random_far_airport = select_random_airport_location()
    #returns a random airport
-   random_far_airport_distance = current_distance(cordinates,(random_far_airport["lat"],random_far_airport["lon"]))
+   random_far_airport_distance = float(current_distance(cordinates,(random_far_airport["lat"],random_far_airport["lon"])))
    #returns the distance of said aiport
    if movement_decision == 3 :
     jump_distance = random.randint(1,15)
@@ -108,9 +114,9 @@ def creature_movement(cordinates):
         print("DEBUG: Creature move big now :(")
        # trough a while loop we make sure the airport is within bounds of a long distance jump
         #  and get a new point until it is withing set bounds so that we may return it
-        while 500>random_far_airport_distance or random_far_airport_distance>2000 :
+        while 500.00>random_far_airport_distance or random_far_airport_distance>2000.00 :
             random_far_airport = select_random_airport_location()
-            random_far_airport_distance = current_distance(cordinates, (random_far_airport["lat"], random_far_airport["lon"]))
+            random_far_airport_distance = float(current_distance(cordinates, (random_far_airport["lat"], random_far_airport["lon"])))
         return random_far_airport
     else:
         print("DEBUG: Creature move small now :)")

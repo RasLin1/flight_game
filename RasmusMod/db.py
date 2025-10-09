@@ -16,7 +16,7 @@ def db_connection():
 #Arpoo satunnaisen lentokentän  ja  palautta sen
 def select_random_airport_location():
     db = db_connection()
-    airport_rand_query = f"SELECT airport.name AS a_name, airport.ident AS ident, airport.latitude_deg AS lat, airport.longitude_deg AS lon, country.name AS c_name FROM airport INNER JOIN country ON airport.iso_country = country.iso_country WHERE airport.type = 'large_airport' AND airport.continent =  'EU' ORDER BY RAND() LIMIT 1"
+    airport_rand_query = f"SELECT airport.name AS a_name, airport.ident AS airport_icao, airport.latitude_deg AS lat, airport.longitude_deg AS lon, country.name AS c_name FROM airport INNER JOIN country ON airport.iso_country = country.iso_country WHERE airport.type = 'large_airport' AND airport.continent =  'EU' ORDER BY RAND() LIMIT 1"
     try: 
         cursor = db.cursor(dictionary=True)
         cursor.execute(airport_rand_query)
@@ -38,7 +38,7 @@ def select_random_airport_location():
 #Ottaa lentokenttä  icao koodin  inputtina  ja hakee sen  kentokentän tietokannasta. 
 def select_specific_airport(icao):
     db = db_connection()
-    airport_query = "SELECT airport.name AS a_name, airport.ident AS ident, airport.latitude_deg AS lat, airport.longitude_deg AS lon, country.name AS c_name FROM airport INNER JOIN country ON airport.iso_country = country.iso_country WHERE airport.type = 'large_airport' AND airport.continent =  'EU' AND ident = %s"
+    airport_query = "SELECT airport.name AS a_name, airport.ident AS airport_icao, airport.latitude_deg AS lat, airport.longitude_deg AS lon, country.name AS c_name FROM airport INNER JOIN country ON airport.iso_country = country.iso_country WHERE airport.type = 'large_airport' AND airport.continent =  'EU' AND ident = %s"
     try: 
         cursor = db.cursor(dictionary=True)
         cursor.execute(airport_query, (icao,))
@@ -47,10 +47,10 @@ def select_specific_airport(icao):
            return query_return
         else:
             print("DEBUG: Error returning specific airport")
-            return []
+            return False
     except mysql.connector.Error as err:
         print(f"Virhe: {err}")
-        return []
+        return False
     finally:
         cursor.close()
         db.close()
@@ -145,12 +145,12 @@ def create_player(name, location):
         cursor.close()
         db.close()
 
-def move_player(player, new_location):
+def move_player(player, new_location, current_fuel):
     db = db_connection()
-    create_player_query = f"UPDATE player SET player_location = %s WHERE player_id = %s"
+    create_player_query = f"UPDATE player SET player_location = %s, fuel = %s WHERE player_id = %s"
     try: 
         cursor = db.cursor(dictionary=True)
-        cursor.execute(create_player_query, (new_location, player["id"]))
+        cursor.execute(create_player_query, (new_location, current_fuel, player["id"]))
         db.commit()
         if cursor.rowcount > 0:
             print(f"DEBUG: Player {player['name']} moved to {new_location}")
@@ -169,11 +169,11 @@ def move_player(player, new_location):
 def create_game_creature(name, location):
     db = db_connection()
     select_creature = select_random_creature()
-    create_game_creature_query = f"INSERT INTO game_creatures (player_id, creature_id, creature_location, creature_current_health) VALUES (%s, %s, %s, %s)"
+    create_game_creature_query = f"INSERT INTO game_creatures (player_id, creature_id, creature_location, creature_current_health, creature_captured) VALUES (%s, %s, %s, %s, %s)"
     try: 
         print(f"DEBUG: player_id={important_player_id}, creature_id={select_creature['creature_id']}, location={location}")
         cursor = db.cursor(dictionary=True)
-        cursor.execute(create_game_creature_query, (important_player_id, select_creature["creature_id"], location, select_creature["creature_max_health"]))
+        cursor.execute(create_game_creature_query, (important_player_id, select_creature["creature_id"], location, select_creature["creature_max_health"], False))
         db.commit()
         print("DEBUG: Insert executed successfully!")
         creature_id = cursor.lastrowid
