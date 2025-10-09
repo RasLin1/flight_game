@@ -5,7 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e7435490-9c1a-4df4-ba31-66473bdf788b" name="Changes" comment="update">
-      <change beforePath="$PROJECT_DIR$/StuMod/hypotens.py" beforeDir="false" afterPath="$PROJECT_DIR$/StuMod/hypotens.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StuMod/events.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/StuMod/sincostan questions.py" beforeDir="false" afterPath="$PROJECT_DIR$/StuMod/sincostan_questions.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -225,7 +227,21 @@
       <option name="presentableId" value="LOCAL−00007" />
       <updated>1759998748588</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL−00008" summary="update">
+      <option name="closed" value="true" />
+      <created>1759999306908</created>
+      <option name="number" value="LOCAL−00008" />
+      <option name="presentableId" value="LOCAL−00008" />
+      <updated>1759999306908</updated>
+    </task>
+    <task id="LOCAL−00009" summary="update">
+      <option name="closed" value="true" />
+      <created>1759999402336</created>
+      <option name="number" value="LOCAL−00009" />
+      <option name="presentableId" value="LOCAL−00009" />
+      <updated>1759999402336</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -260,6 +276,10 @@
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/StuMod/hypotens.py</url>
           <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/RasmusMod/game.py</url>
+          <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
