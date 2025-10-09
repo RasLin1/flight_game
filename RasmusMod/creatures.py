@@ -1,4 +1,4 @@
-from db import create_player, move_player, create_game_creature, move_creature, select_random_airport_location
+from db import create_player, move_player, create_game_creature, move_creature, select_random_airport_location, update_player_health, update_creature_health
 from game_functions import select_closest_airports, current_distance
 import random
 
@@ -19,7 +19,7 @@ def create_entity(name, airport, type):
                 "location": airport["airport_icao"],
                 "location_name": airport["a_name"],
                 "cordinates": (airport["lat"], airport["lon"]),
-                "fuel": 100
+                "fuel": 100,
             }
             return entity
     elif type == 2:
@@ -95,7 +95,42 @@ def move_entity(entity, airport, type):
                     "location_name": airport["a_name"],
                     "cordinates": (airport["lat"], airport["lon"])
                 }
-    
+
+#Updates the health of an entity
+def update_entity_health(entity, health_change, type):
+    if type == 1:
+        player = update_player_health(entity, health_change)
+        if player == True:
+            print("Player health change success")
+            return {
+            "name": entity["name"],
+            "id": entity["id"],
+            "country": entity["c_name"],
+            "location": entity["airport_icao"],
+            "location_name": entity["a_name"],
+            "cordinates": entity["cordinates"],
+            "fuel": entity["fuel"]
+            }
+        else:
+            print("Creature health change fail")
+            return entity     
+    elif type == 2:
+        creature = move_creature(entity, creature_movement_decision["airport_icao"])
+        if creature == True:
+            print(f"DEBUG: Creature named {entity["name"]} moved succesfully")
+        else:
+            print(f"DEBUG: Creature named {entity["name"]} didn't move succesfully")
+            return entity
+        return {
+            "name": entity["name"],
+            "id": entity["id"],
+            "country": entity["country"],
+            "location": entity["location"],
+            "location_name": entity["location_name"],
+            "cordinates": entity["cordinates"]
+            }
+
+#The movement  logic for creatures
 def creature_movement(cordinates):
    movement_decision = random.randint(1,3)
    #deciding value for wether the monster stays or moves

@@ -165,6 +165,31 @@ def move_player(player, new_location, current_fuel):
         cursor.close()
         db.close()
     
+def update_player_health(player, health_change):
+    db = db_connection()
+    select_player_query = f"SELECT current_health FROM player WHERE player_id = %s"
+    cursor = db.cursor(dictionary=True)
+    cursor.execute(select_player_query, (player["id"]))
+    query_return = cursor.fetchone()
+    new_health = query_return["current_health"] + (health_change)
+    update_player_query = f"UPDATE player SET current_health = %s WHERE player_id = %s"
+    try: 
+        cursor = db.cursor(dictionary=True)
+        cursor.execute(update_player_query, (new_health, player["id"]))
+        db.commit()
+        if cursor.rowcount > 0:
+            print(f"Players health is now {new_health}")
+            return True
+        else:
+            print("DEBUG: Error in updating player health")
+            return False
+    except mysql.connector.Error as err:
+        print(f"Virhe: {err}")
+        return False
+    finally:
+        cursor.close()
+        db.close()
+
 #Tästä alkaa hirviö jutskat
 def create_game_creature(name, location):
     db = db_connection()
@@ -225,6 +250,31 @@ def move_creature(creature, new_location):
     except mysql.connector.Error as err:
         print(f"Virhe: {err}")
         cursor.close()
+        return False
+    finally:
+        cursor.close()
+        db.close()
+
+def update_creature_health(creature, health_change):
+    db = db_connection()
+    select_player_query = f"SELECT current_health FROM game_creatures WHERE player_id = %s"
+    cursor = db.cursor(dictionary=True)
+    cursor.execute(select_player_query, (creature["id"]))
+    query_return = cursor.fetchone()
+    new_health = query_return["current_health"] + (health_change)
+    update_player_query = f"UPDATE player SET current_health = %s WHERE id = %s"
+    try: 
+        cursor = db.cursor(dictionary=True)
+        cursor.execute(update_player_query, (new_health, creature["id"]))
+        db.commit()
+        if cursor.rowcount > 0:
+            print(f"{creature["name"]} health is now {new_health}")
+            return True
+        else:
+            print("DEBUG: Error in updating player health")
+            return False
+    except mysql.connector.Error as err:
+        print(f"Virhe: {err}")
         return False
     finally:
         cursor.close()
