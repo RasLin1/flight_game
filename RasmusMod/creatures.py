@@ -115,7 +115,7 @@ def update_entity_health(entity, health_change, type):
             print("Creature health change fail")
             return entity     
     elif type == 2:
-        creature = move_creature(entity, creature_movement_decision["airport_icao"])
+        creature = update_creature_health(entity, health_change)
         if creature == True:
             print(f"DEBUG: Creature named {entity["name"]} moved succesfully")
         else:

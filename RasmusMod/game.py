@@ -1,6 +1,8 @@
-from db import select_random_airport_location, select_random_event, select_specific_airport
+from db import select_random_airport_location, select_random_event, select_specific_airport, update_player_value, select_specific_player
 import creatures
 import game_functions
+from combat import combat
+import random
 
 allow_game = True
 
@@ -26,7 +28,17 @@ def play():
             distance = float(game_functions.current_distance(player['cordinates'], monster['cordinates']))
             #Jos pelaaja ja hirviö ovat samalla lentokentältä niin palaajan pitäisi taistella hirviön kanssa
             if distance == 0.00:
-                print("Located in same airport as monster")
+                print(f"{player['name']} on samalla lentokentällä kuin {monster['name']}")
+                player_action = input(f"Kirjoita 'T' jos haluat taistella | Kirjoita 'P' jos haluat yrittää paeta: ").upper()
+                creature_action = random.randint(1, 3)
+                if player_action == "P":
+                    if creature_action == 3:
+                        print("Yrität paeta mutta hirviö hyökkää")
+                        combat(player["id"], monster["id"])
+                    else:
+                        closest_airport = game_functions.select_closest_airports(1, player["cordinates"])
+                        player = creatures.move_entity(player, closest_airport["airport_icao"], 1)
+
             #Kertoo missä pelaaja on
             print(f"{player['name']} etäisyys {monster['name']} {distance}km") 
         #Hakee ensimmäisen arvon määrä lentokenttiä
@@ -39,6 +51,16 @@ def play():
             #Päivittää pelajan sijainin
             player = creatures.move_entity(player, select_specific_airport(input("Anna lentokentän icao-koodi jonne haluat siirtyä: ").upper()), 1)
         elif round_action == "L":
+            event = select_random_event()
+            print(event["event_description"])
+            user_answer = input("Kirjoita vastaus saadaksesi palkinnon: ")
+            if user_answer == event["event_answer"]:
+                print("Right answer")
+                reward_return = update_player_value(event["event_reward_type"], event["event_reward_value"], player["id"])
+                if reward_return:
+                    print(select_specific_player(player["id"]))
+            else:
+                print("Wrong answer")
             print("ZZZ...")
         else:
             print("Move invalid input")

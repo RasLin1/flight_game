@@ -145,6 +145,26 @@ def create_player(name, location):
         cursor.close()
         db.close()
 
+#Hakee pelaajan käyttäen id arvoa"
+def select_specific_player(id):
+    db = db_connection()
+    specific_creature_query = f"SELECT * FROM player WHERE player_id = %s LIMIT 1"
+    try: 
+        cursor = db.cursor(dictionary=True)
+        cursor.execute(specific_creature_query, (id, ))
+        query_return = cursor.fetchone()
+        if query_return:
+            return query_return
+        else:
+            print("Hirviöö ei löytynyt")
+            return []
+    except mysql.connector.Error as err:
+        print(f"Virhe: {err}")
+        return []
+    finally:
+        cursor.close()
+        db.close()
+
 def move_player(player, new_location, current_fuel):
     db = db_connection()
     create_player_query = f"UPDATE player SET player_location = %s, fuel = %s WHERE player_id = %s"
@@ -190,7 +210,39 @@ def update_player_health(player, health_change):
         cursor.close()
         db.close()
 
+#Modular funktion that works for player fuel or money
+def update_player_value(value_name, value_change, id):
+    allowed_columns  = ["fuel", "money"]
+    if value_name not in allowed_columns:
+        print(f"DEBUG: Invalid column name: {value_name}")
+        return False
+    db = db_connection()
+    select_player_query = f"SELECT {value_name} FROM player WHERE player_id = %s"
+    cursor = db.cursor(dictionary=True)
+    cursor.execute(select_player_query, (id, ))
+    query_return = cursor.fetchone()
+    new_value = query_return[f"{value_name}"] + (value_change)
+    cursor =  db.cursor()
+    update_player_query = f"UPDATE player SET {value_name} = %s WHERE player_id = %s"
+    try: 
+        cursor = db.cursor(dictionary=True)
+        cursor.execute(update_player_query, (new_value, id))
+        db.commit()
+        if cursor.rowcount > 0:
+            return True
+        else:
+            print("DEBUG: Error in updating value health")
+            return False
+    except mysql.connector.Error as err:
+        print("DEBUG: Error while updating player value")
+        print(f"Virhe: {err}")
+        return False
+    finally:
+        cursor.close()
+        db.close()
+
 #Tästä alkaa hirviö jutskat
+#Luo valitse ja luo hirviön peliä varten
 def create_game_creature(name, location):
     db = db_connection()
     select_creature = select_random_creature()
@@ -214,12 +266,39 @@ def create_game_creature(name, location):
         cursor.close()
         db.close()
 
+#Hakee random hirviön
 def select_random_creature():
     db = db_connection()
     random_creature_query = f"SELECT * FROM creature ORDER BY RAND() LIMIT 1"
     try: 
         cursor = db.cursor(dictionary=True)
         cursor.execute(random_creature_query)
+        query_return = cursor.fetchone()
+        print("DEBUG random creature:", query_return)
+        if query_return:
+            return query_return
+        else:
+            print("Hirviöö ei löytynyt")
+            return []
+    except mysql.connector.Error as err:
+        print(f"Virhe: {err}")
+        return []
+    finally:
+        cursor.close()
+        db.close()
+
+#Hakee hirviön käyttäen id arvoa"
+def select_specific_creature(id):
+    db = db_connection()
+    specific_creature_query = f"SELECT creature_id FROM game_creature WHERE id = %s LIMIT 1"
+    cursor = db.cursor()
+    cursor.execute(specific_creature_query(id))
+    creature_id = cursor.fetchone()
+    cursor.close()
+    specific_creature_query = f"SELECT * FROM creature WHERE creature_id = %s LIMIT 1"
+    try: 
+        cursor = db.cursor(dictionary=True)
+        cursor.execute(specific_creature_query(creature_id))
         query_return = cursor.fetchone()
         print("DEBUG random creature:", query_return)
         if query_return:
