@@ -41,6 +41,19 @@ def play():
 
             #Kertoo missä pelaaja on
             print(f"{player['name']} etäisyys {monster['name']} {distance}km") 
+        placed_probe_amount = probes.len()
+        if placed_probe_amount >= 5:
+            print("Maksimi määrä aktiivisia hakijoita")
+            remove_probe_question = input("Kirjoita 'P' postaaksesi hakijan: ").upper()
+            if remove_probe_question == "P":
+                for x in probes:
+                    print(f"Numero: {probes["number"]} | Sijainti: {probes}")
+                probes = [x for x in probes if x.get('Sijainti') != 30]
+            else:
+                print("Jatkuu...")
+        elif placed_probe_amount < 5:
+            place_probe = input("")       
+            probe_question = input("")
         #Hakee ensimmäisen arvon määrä lentokenttiä
         airports = game_functions.select_closest_airports(8, player['cordinates'])
         #Tulostaa kaikki lähimmät lentokentät
