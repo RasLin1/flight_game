@@ -70,10 +70,12 @@ def move_entity(entity, airport, type):
         elif type == 2:
             print(f"DEBUG: Creature named {entity["name"]} starting movement")
             creature_movement_decision = creature_movement(entity["cordinates"])
+            print(f"DEBUG: Movement returned: {creature_movement_decision}")
             if creature_movement_decision == False:
                 print(f"DEBUG: Creature named {entity["name"]} doesn't want to move")
+                return entity
             else:
-                creature = move_creature(entity, airport["ident"])
+                creature = move_creature(entity, creature_movement_decision["airport_icao"])
                 if creature == True:
                     print(f"DEBUG: Creature named {entity["name"]} moved succesfully")
                 else:
