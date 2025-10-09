@@ -19,7 +19,8 @@ def random_hypotenuse():
         cursor = connection.cursor(dictionary=True)
         cursor.execute(sql)
         result = cursor.fetchall()
-        print(f"Oikein! Palkinnoksi saat {result["event_reward_value"]} {result["event_reward_type"]}")
+        print(f"Oikein! Palkinnoksi saat {result['event_reward_value']} {result['event_reward_type']}")
+        # tähän vielä lisää updaten pelaajan resursseihin
     return
 
 #command = input("Lopeta painamalle enter, jatka antamalla mikä tahansa stringgi: ")
