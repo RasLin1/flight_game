@@ -1,26 +1,44 @@
-from game_functions import get_cordinates
-from db import create_player
+from db import create_player, move_player, create_game_monster, move_creature
 
 
 #Luo pelaajan sanakirjana
 def create_entity(name, airport, type):
     print(f"DEBUG: create_player() called with name={name}, location={airport["ident"]}")
-    entity = {
-        "name": name,
-        "country": airport["c_name"],
-        "location": airport["ident"],
-        "location_name":airport["a_name"],
-        "cordinates": (airport["lat"], airport["lon"])
-    }
     if type == 1:
         player = create_player(name, airport["ident"])
-        if player == True:
-            print("Player creation success")
-        else:
+        if player == False:
             print("Player creation fail")
+            return False
+        else:  
+            print("Player creation success")
+            entity = {
+                "name": name,
+                "id": player,
+                "country": airport["c_name"],
+                "location": airport["ident"],
+                "location_name":airport["a_name"],
+                "cordinates": (airport["lat"], airport["lon"])
+            }
+            return entity
+    if type == 2:
+        player = create_game_monster(name, airport["ident"])
+        if player == False:
+            print("Monster creation fail")
+            return False
+        else:  
+            print("Player creation success")
+            entity = {
+                "name": name,
+                "id": player,
+                "country": airport["c_name"],
+                "location": airport["ident"],
+                "location_name":airport["a_name"],
+                "cordinates": (airport["lat"], airport["lon"])
+            }
+            return entity
     return entity
 
-def move_entity(entity, airport):
+def move_entity(entity, airport, type):
     if airport == False:
         print("Error in moving, possibly invalid icao")
         return {
@@ -31,6 +49,13 @@ def move_entity(entity, airport):
             "cordinates": entity["cordinates"]
         }
     else:
+        if type == 1:
+            player = move_player(entity, airport["ident"])
+        if player == True:
+            print("Creature creation success")
+        else:
+            print("Creature creation fail")
+            return entity
         return {
             "name": entity["name"],
             "country": airport["c_name"],
