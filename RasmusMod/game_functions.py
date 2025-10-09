@@ -1,4 +1,4 @@
-from db import  select_all_airports
+from db import  select_all_airports, select_random_airport_location
 from geopy.distance import geodesic
 
 #Ottaa l1 ja l2 monikot, palauttaa etäisyyden kilometreina
@@ -19,3 +19,5 @@ def select_closest_airports(amount, player_cordinates):
     airport_distances.sort(key=lambda a: float(a["distance"]))
     closest_airports = airport_distances[:amount]
     return closest_airports
+
+

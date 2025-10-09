@@ -1,8 +1,6 @@
 import mysql.connector
 import random
 
-important_player_id = 0
-
 #Tässsä tiedostossa löytyy tietokantaan liityviä kyselyitä
 #Tietokanta connector
 def db_connection():
@@ -220,11 +218,9 @@ def move_creature(creature, new_location):
         db.commit()
         if cursor.rowcount > 0:
             print(f"DEBUG: Creature {creature['name']} moved to {new_location}")
-            cursor.close()
             return True
         else:
             print("DEBUG: No creature updated — check creature ID or location.")
-            cursor.close()
             return False
     except mysql.connector.Error as err:
         print(f"Virhe: {err}")
