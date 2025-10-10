@@ -1,4 +1,4 @@
-from db import select_random_airport_location, select_random_event, select_specific_airport, update_player_value, select_specific_player, select_airports_by_country
+from db import select_random_airport_location, select_random_event, select_specific_airport, update_player_value, select_specific_player, update_player_health
 import creatures
 import game_functions
 from combat import combat
@@ -52,7 +52,7 @@ def play():
                     combat_result = combat(player["id"], monster["id"])
                     if combat_result == True:
                         monsters = [x for x in monsters if x.get("id") != monster["id"]]
-        probes = game_functions.probe_interaction(monsters)
+        game_functions.probe_interaction(monsters)
         #Hakee ensimmäisen arvon määrä lentokenttiä
         airports = game_functions.select_closest_airports(8, player['cordinates'])
         #Tulostaa kaikki lähimmät lentokentät
@@ -69,11 +69,11 @@ def play():
             if user_answer == event["event_answer"]:
                 print("Right answer")
                 reward_return = update_player_value(event["event_reward_type"], event["event_reward_value"], player["id"])
-                if reward_return:
-                    print(select_specific_player(player["id"]))
             else:
                 print("Wrong answer")
-            
+            reference_player = select_specific_player(player["id"])
+            if reference_player["current_health"] < reference_player["max_health"]:
+                update_player_health(player["player_id"], 10, 1)
             print("ZZZ...")
         else:
             print("Move invalid input")

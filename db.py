@@ -110,7 +110,6 @@ def select_random_event():
         cursor = db.cursor(dictionary=True)
         cursor.execute(random_event_query, (event_number,))
         query_return = cursor.fetchone()
-        print("DEBUG random event:", query_return)
         if query_return:
             return query_return
         else:
@@ -173,7 +172,6 @@ def move_player(player, new_location, current_fuel):
         cursor.execute(create_player_query, (new_location, current_fuel, player["id"]))
         db.commit()
         if cursor.rowcount > 0:
-            print(f"DEBUG: Player {player['name']} moved to {new_location}")
             return True
         else:
             print("DEBUG: No player updated — check player ID or location.")
@@ -248,13 +246,10 @@ def create_game_creature(name, location):
     select_creature = select_random_creature()
     create_game_creature_query = f"INSERT INTO game_creatures (player_id, creature_id, creature_location, creature_current_health, creature_captured) VALUES (%s, %s, %s, %s, %s)"
     try: 
-        print(f"DEBUG: player_id={important_player_id}, creature_id={select_creature['creature_id']}, location={location}")
         cursor = db.cursor(dictionary=True)
         cursor.execute(create_game_creature_query, (important_player_id, select_creature["creature_id"], location, select_creature["creature_max_health"], False))
         db.commit()
-        print("DEBUG: Insert executed successfully!")
         creature_id = cursor.lastrowid
-        print(f"DEBUG: lastrowid={creature_id}")
         if creature_id:
             return creature_id
         else:
@@ -274,7 +269,6 @@ def select_random_creature():
         cursor = db.cursor(dictionary=True)
         cursor.execute(random_creature_query)
         query_return = cursor.fetchone()
-        print("DEBUG random creature:", query_return)
         if query_return:
             return query_return
         else:
@@ -295,9 +289,7 @@ def select_specific_creature(id):
         cursor = db.cursor(dictionary=True)
         cursor.execute(specific_creature_query, (id, ))
         query_return = cursor.fetchone()
-        print("DEBUG random creature:", query_return)
         if query_return:
-            print("DEBUG: Found creature:", query_return)
             return query_return
         else:
             print("Hirviöö ei löytynyt")
@@ -317,7 +309,6 @@ def move_creature(creature, new_location):
         cursor.execute(move_creature_query, (new_location, creature["id"]))
         db.commit()
         if cursor.rowcount > 0:
-            print(f"DEBUG: Creature {creature['name']} moved to {new_location}")
             return True
         else:
             print("DEBUG: No creature updated — check creature ID or location.")

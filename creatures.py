@@ -4,14 +4,12 @@ import random
 
 #Luo pelaajan sanakirjana
 def create_entity(name, airport, type):
-    print(f"DEBUG: create_player() called with name={name}, location={airport["airport_icao"]}")
     if type == 1:
         player = create_player(name, airport["airport_icao"])
         if player == False:
             print("Player creation fail")
             return False
         else:  
-            print("Player creation success")
             entity = {
                 "name": name,
                 "id": player,
@@ -28,7 +26,6 @@ def create_entity(name, airport, type):
             print("Monster creation fail")
             return False
         else:  
-            print("Monster creation success")
             entity = {
                 "name": name,
                 "id": creature,
@@ -74,34 +71,29 @@ def move_entity(entity, airport, type):
                 return entity
             
         elif type == 2:
-            print(f"DEBUG: Creature named {entity["name"]} starting movement")
             creature_movement_decision = creature_movement(entity["cordinates"])
-            print(f"DEBUG: Movement returned: {creature_movement_decision}")
             if creature_movement_decision == False:
-                print(f"DEBUG: Creature named {entity["name"]} doesn't want to move")
                 return entity
             else:
                 creature = move_creature(entity, creature_movement_decision["airport_icao"])
-                if creature == True:
-                    print(f"DEBUG: Creature named {entity["name"]} moved succesfully")
-                else:
+                if creature == False:
                     print(f"DEBUG: Creature named {entity["name"]} didn't move succesfully")
                     return entity
-                return {
-                    "name": entity["name"],
-                    "id": entity["id"],
-                    "country": airport["c_name"],
-                    "location": airport["airport_icao"],
-                    "location_name": airport["a_name"],
-                    "cordinates": (airport["lat"], airport["lon"])
-                }
+                else:  
+                    return {
+                        "name": entity["name"],
+                        "id": entity["id"],
+                        "country": airport["c_name"],
+                        "location": airport["airport_icao"],
+                        "location_name": airport["a_name"],
+                        "cordinates": (airport["lat"], airport["lon"])
+                    }
 
 #Updates the health of an entity
 def update_entity_health(id, health_change, type):
     if type == 1:
         player = update_player_health(id, health_change)
         if player == True:
-            print("DEBUG: Player health change success")
             return True
         else:
             print("DEBUG: Player health change fail")
@@ -109,7 +101,6 @@ def update_entity_health(id, health_change, type):
     elif type == 2:
         creature = update_creature_health(id, health_change)
         if creature == True:
-            print(f"DEBUG: Creature health changed succesfully")
             return True
         else:
             print(f"DEBUG: Creature health didn't change succesfully")
@@ -131,7 +122,6 @@ def creature_movement(cordinates):
     jump_distance = random.randint(1,15)
     #monster has decided to move
     if jump_distance == 15:
-        print("DEBUG: Creature move big now :(")
        # trough a while loop we make sure the airport is within bounds of a long distance jump
         #  and get a new point until it is withing set bounds so that we may return it
         while 500.00>random_far_airport_distance or random_far_airport_distance>2000.00 :
@@ -139,10 +129,8 @@ def creature_movement(cordinates):
             random_far_airport_distance = float(current_distance(cordinates, (random_far_airport["lat"], random_far_airport["lon"])))
         return random_far_airport
     else:
-        print("DEBUG: Creature move small now :)")
         #select a random airport in the list
         return points[random_close_airport]
 
    else:
-        print("DEBUG: Creature stays :D")
         return False
