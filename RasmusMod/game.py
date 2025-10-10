@@ -1,4 +1,4 @@
-from db import select_random_airport_location, select_random_event, select_specific_airport, update_player_value, select_specific_player
+from db import select_random_airport_location, select_random_event, select_specific_airport, update_player_value, select_specific_player, select_airports_by_country
 import creatures
 import game_functions
 from combat import combat
@@ -8,7 +8,6 @@ allow_game = True
 
 def play():
     round = 1
-    probes = []
     #Luo pelaajan sekä hirviön tietokanassa ja säästää tärkeät tiedot muuntaijiin
     player = creatures.create_entity(input("Anna pelaajan nimi: "), select_random_airport_location(), 1)
     monsters = []
@@ -16,9 +15,6 @@ def play():
         entity = creatures.create_entity(f"Ent{x}", select_random_airport_location(), 2)
         if entity:
             monsters.append(entity)
-        else:
-            print(f"DEBUG: Skipping failed monster creation for Ent{x}")
-
     while allow_game:
         #Pelaaja vuoro alkaa tästä
         #Kertoo  pelaajan sijainin
@@ -38,22 +34,10 @@ def play():
                     else:
                         closest_airport = game_functions.select_closest_airports(1, player["cordinates"])
                         player = creatures.move_entity(player, closest_airport["airport_icao"], 1)
-
-            #Kertoo missä pelaaja on
-            print(f"{player['name']} etäisyys {monster['name']} {distance}km") 
-        placed_probe_amount = probes.len()
-        if placed_probe_amount >= 5:
-            print("Maksimi määrä aktiivisia hakijoita")
-            remove_probe_question = input("Kirjoita 'P' postaaksesi hakijan: ").upper()
-            if remove_probe_question == "P":
-                for x in probes:
-                    print(f"Numero: {probes["number"]} | Sijainti: {probes}")
-                probes = [x for x in probes if x.get('Sijainti') != 30]
-            else:
-                print("Jatkuu...")
-        elif placed_probe_amount < 5:
-            place_probe = input("")       
-            probe_question = input("")
+                elif player_action == "T":
+                    print("Hyökkäät hirviön kimppuun")
+                    combat(player["id"], monster["id"])
+        probes = game_functions.probe_interaction(monsters)
         #Hakee ensimmäisen arvon määrä lentokenttiä
         airports = game_functions.select_closest_airports(8, player['cordinates'])
         #Tulostaa kaikki lähimmät lentokentät

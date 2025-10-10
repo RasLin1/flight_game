@@ -101,34 +101,19 @@ def update_entity_health(entity, health_change, type):
     if type == 1:
         player = update_player_health(entity, health_change)
         if player == True:
-            print("Player health change success")
-            return {
-            "name": entity["name"],
-            "id": entity["id"],
-            "country": entity["c_name"],
-            "location": entity["airport_icao"],
-            "location_name": entity["a_name"],
-            "cordinates": entity["cordinates"],
-            "fuel": entity["fuel"]
-            }
+            print("Entity health change success")
+            return True
         else:
-            print("Creature health change fail")
-            return entity     
+            print("Entity health change fail")
+            return  False
     elif type == 2:
         creature = update_creature_health(entity, health_change)
         if creature == True:
             print(f"DEBUG: Creature named {entity["name"]} moved succesfully")
+            return True
         else:
             print(f"DEBUG: Creature named {entity["name"]} didn't move succesfully")
-            return entity
-        return {
-            "name": entity["name"],
-            "id": entity["id"],
-            "country": entity["country"],
-            "location": entity["location"],
-            "location_name": entity["location_name"],
-            "cordinates": entity["cordinates"]
-            }
+            return False
 
 #The movement  logic for creatures
 def creature_movement(cordinates):

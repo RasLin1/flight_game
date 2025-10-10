@@ -76,17 +76,17 @@ def select_all_airports():
         db.close()
 
 # Hakee kaikki lentokentät tietystä maasta
-def select_airports_by_country(country_code):
+def select_airports_by_country(country_name):
     db = db_connection()
-    airport_query = f"SELECT airport.name AS airport_name, airport.ident AS airport_icao, airport.type AS airport_type, airport.latitude_deg AS lat, airport.longitude_deg AS lon, country.name AS country_name FROM airport INNER JOIN country  ON airport.iso_country = country.iso_country WHERE airport.iso_country = %s AND airport.type NOT IN ('heliport', 'seaplane_base', 'closed')"
+    airport_query = f"SELECT airport.name AS airport_name, airport.ident AS airport_icao, airport.type AS airport_type, airport.latitude_deg AS lat, airport.longitude_deg AS lon, country.name AS country_name FROM airport INNER JOIN country  ON airport.iso_country = country.iso_country WHERE country.name = %s AND airport.type = 'large_airport'"
     try:
         cursor = db.cursor(dictionary=True)
-        cursor.execute(airport_query)
+        cursor.execute(airport_query, (country_name, ))
         query_return = cursor.fetchall()
         if query_return:
             return query_return
         else:
-            print(f"Ei löytynyt lentokenttiä maalle: {country_code}")
+            print(f"Ei löytynyt lentokenttiä maalle: {country_name}")
             return []
     except mysql.connector.Error as err:
         print(f"Virhe: {err}")
@@ -129,10 +129,10 @@ def select_random_event():
 def create_player(name, location):
     global important_player_id
     db = db_connection()
-    create_player_query = f"INSERT INTO player (player_name, player_location, fuel, money, max_health, current_health, game_score, game_completed) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+    create_player_query = f"INSERT INTO player (player_name, player_location, fuel, money, max_health, current_health, damage, game_score, game_completed) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
     try: 
         cursor = db.cursor(dictionary=True)
-        cursor.execute(create_player_query, (name, location, 100, 100, 100, 100, 0, False))
+        cursor.execute(create_player_query, (name, location, 100, 100, 100, 100, 10, 0, False))
         db.commit()
         important_player_id = cursor.lastrowid
         if important_player_id:
@@ -185,17 +185,17 @@ def move_player(player, new_location, current_fuel):
         cursor.close()
         db.close()
     
-def update_player_health(player, health_change):
+def update_player_health(id, health_change):
     db = db_connection()
     select_player_query = f"SELECT current_health FROM player WHERE player_id = %s"
     cursor = db.cursor(dictionary=True)
-    cursor.execute(select_player_query, (player["id"]))
+    cursor.execute(select_player_query, (id))
     query_return = cursor.fetchone()
     new_health = query_return["current_health"] + (health_change)
     update_player_query = f"UPDATE player SET current_health = %s WHERE player_id = %s"
     try: 
         cursor = db.cursor(dictionary=True)
-        cursor.execute(update_player_query, (new_health, player["id"]))
+        cursor.execute(update_player_query, (new_health, id))
         db.commit()
         if cursor.rowcount > 0:
             print(f"Players health is now {new_health}")
@@ -290,18 +290,14 @@ def select_random_creature():
 #Hakee hirviön käyttäen id arvoa"
 def select_specific_creature(id):
     db = db_connection()
-    specific_creature_query = f"SELECT creature_id FROM game_creature WHERE id = %s LIMIT 1"
-    cursor = db.cursor()
-    cursor.execute(specific_creature_query(id))
-    creature_id = cursor.fetchone()
-    cursor.close()
-    specific_creature_query = f"SELECT * FROM creature WHERE creature_id = %s LIMIT 1"
+    specific_creature_query = f"SELECT game_creatures.id AS id, game_creatures.creature_current_health AS health, creature.creature_damage AS damage, creature.creature_name AS name FROM game_creatures INNER JOIN creature ON game_creatures.creature_id = creature.creature_id WHERE game_creatures.id = %s LIMIT 1"
     try: 
         cursor = db.cursor(dictionary=True)
-        cursor.execute(specific_creature_query(creature_id))
+        cursor.execute(specific_creature_query, (id, ))
         query_return = cursor.fetchone()
         print("DEBUG random creature:", query_return)
         if query_return:
+            print("DEBUG: Found creature:", query_return)
             return query_return
         else:
             print("Hirviöö ei löytynyt")
@@ -334,17 +330,17 @@ def move_creature(creature, new_location):
         cursor.close()
         db.close()
 
-def update_creature_health(creature, health_change):
+def update_creature_health(id, health_change):
     db = db_connection()
     select_player_query = f"SELECT current_health FROM game_creatures WHERE player_id = %s"
     cursor = db.cursor(dictionary=True)
-    cursor.execute(select_player_query, (creature["id"]))
+    cursor.execute(select_player_query, (id, ))
     query_return = cursor.fetchone()
     new_health = query_return["current_health"] + (health_change)
     update_player_query = f"UPDATE player SET current_health = %s WHERE id = %s"
     try: 
         cursor = db.cursor(dictionary=True)
-        cursor.execute(update_player_query, (new_health, creature["id"]))
+        cursor.execute(update_player_query, (new_health, id))
         db.commit()
         if cursor.rowcount > 0:
             print(f"{creature["name"]} health is now {new_health}")
