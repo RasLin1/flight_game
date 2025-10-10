@@ -332,12 +332,31 @@ def move_creature(creature, new_location):
 
 def update_creature_health(id, health_change):
     db = db_connection()
-    select_player_query = f"SELECT current_health FROM game_creatures WHERE player_id = %s"
+    select_player_query = f"SELECT creature_current_health FROM game_creatures WHERE id = %s"
     cursor = db.cursor(dictionary=True)
     cursor.execute(select_player_query, (id, ))
     query_return = cursor.fetchone()
-    new_health = query_return["current_health"] + (health_change)
-    update_player_query = f"UPDATE player SET current_health = %s WHERE id = %s"
+    new_health = query_return["creature_current_health"] + (health_change)
+    update_creature_query = f"UPDATE game_creatures SET creature_current_health = %s WHERE id = %s"
+    try: 
+        cursor = db.cursor(dictionary=True)
+        cursor.execute(update_creature_query, (new_health, id))
+        db.commit()
+        if cursor.rowcount > 0:
+            return True
+        else:
+            print("DEBUG: Error in updating creature health")
+            return False
+    except mysql.connector.Error as err:
+        print(f"Virhe: {err}")
+        return False
+    finally:
+        cursor.close()
+        db.close()
+
+def update_creature_captured_status(id, status_change):
+    db = db_connection()
+    update_player_query = f"UPDATE creature SET current_health = %s WHERE id = %s"
     try: 
         cursor = db.cursor(dictionary=True)
         cursor.execute(update_player_query, (new_health, id))

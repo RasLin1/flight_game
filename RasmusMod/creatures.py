@@ -97,22 +97,22 @@ def move_entity(entity, airport, type):
                 }
 
 #Updates the health of an entity
-def update_entity_health(entity, health_change, type):
+def update_entity_health(id, health_change, type):
     if type == 1:
-        player = update_player_health(entity, health_change)
+        player = update_player_health(id, health_change)
         if player == True:
-            print("Entity health change success")
+            print("DEBUG: Player health change success")
             return True
         else:
-            print("Entity health change fail")
+            print("DEBUG: Player health change fail")
             return  False
     elif type == 2:
-        creature = update_creature_health(entity, health_change)
+        creature = update_creature_health(id, health_change)
         if creature == True:
-            print(f"DEBUG: Creature named {entity["name"]} moved succesfully")
+            print(f"DEBUG: Creature health changed succesfully")
             return True
         else:
-            print(f"DEBUG: Creature named {entity["name"]} didn't move succesfully")
+            print(f"DEBUG: Creature health didn't change succesfully")
             return False
 
 #The movement  logic for creatures

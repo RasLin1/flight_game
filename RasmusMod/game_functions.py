@@ -44,7 +44,7 @@ def probe_interaction(monsters):
      elif placed_probe_amount < 5:
           place_probe = input("Kirjoita 'A' asettaaksesi hakijan")   
           if place_probe == "A":   
-               probe_question = select_airports_by_country(input("Kirjoita maan nimi englaniksi jonne haluat assettaa hakijan: "))
+               probe_question = select_airports_by_country(input("Kirjoita maan nimi englaniksi jonne haluat assettaa hakijan: ").upper())
                for x in probe_question:
                     print(f"Nimi: {x["airport_name"]} | Sijainti: {x["airport_icao"]}")
                airport = select_specific_airport(input("Anna lentokentän ICAO-koodi jonne haluat asentaa hakijan: "))
