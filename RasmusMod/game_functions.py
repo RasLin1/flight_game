@@ -35,19 +35,19 @@ def probe_interaction(monsters):
                for x in probes:
                     print(f"Numero: {x["number"]} | Sijainti: {x["icao"]} | Maa: {x["country"]}")
                poisto_kohde = input("Anna hakijan numero jonka haluat poistaa: ")
-               probes = [x for x in probes if x.get("Sijainti") != poisto_kohde]
+               probes = [x for x in probes if x.get("Numero") != poisto_kohde]
           else:
                for x in probes:
                     for monster in monsters:
                          distance = float(current_distance(probes['cordinates'], monster['cordinates']))
                          print(f"Hakija nr.{x['number']} | Sijainti: {x["icao"]} etäisyys {monster['name']} on {distance}km")
      elif placed_probe_amount < 5:
-          place_probe = input("Kirjoita 'A' asettaaksesi hakijan")   
+          place_probe = input("Kirjoita 'A' asettaaksesi hakijan: ").upper()   
           if place_probe == "A":   
                probe_question = select_airports_by_country(input("Kirjoita maan nimi englaniksi jonne haluat assettaa hakijan: ").upper())
                for x in probe_question:
                     print(f"Nimi: {x["airport_name"]} | Sijainti: {x["airport_icao"]}")
-               airport = select_specific_airport(input("Anna lentokentän ICAO-koodi jonne haluat asentaa hakijan: "))
+               airport = select_specific_airport(input("Anna lentokentän ICAO-koodi jonne haluat asentaa hakijan: ").upper())
                probes.append({"number": probes_counter, "icao": airport["airport_icao"], "country": airport["c_name"], "cordinates": (airport["lat"], airport["lon"])})
                probes_counter = probes_counter + 1
           for x in probes:

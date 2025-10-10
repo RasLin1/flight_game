@@ -4,10 +4,12 @@ import game_functions
 from combat import combat
 import random
 
-allow_game = True
+
+
 
 def play():
     round = 1
+    allow_game = True
     #Luo pelaajan sekä hirviön tietokanassa ja säästää tärkeät tiedot muuntaijiin
     player = creatures.create_entity(input("Anna pelaajan nimi: "), select_random_airport_location(), 1)
     monsters = []
@@ -20,6 +22,12 @@ def play():
         #Kertoo  pelaajan sijainin
         print(f"{player['name']} sijainti {player['location_name']} on {player['location']}")
         #Kertoo etäisyyden pelaajan ja hirviön välillä
+        if len(monsters) == 0:
+            allow_game = False
+            print("Voitit pelin!!!")
+        elif round > 100:
+            allow_game = False
+            print("Hävisit pelin, sinulla kesti lian kauan")
         for monster in monsters:
             distance = float(game_functions.current_distance(player['cordinates'], monster['cordinates']))
             #Jos pelaaja ja hirviö ovat samalla lentokentältä niin palaajan pitäisi taistella hirviön kanssa
@@ -30,13 +38,20 @@ def play():
                 if player_action == "P":
                     if creature_action == 3:
                         print("Yrität paeta mutta hirviö hyökkää")
-                        combat(player["id"], monster["id"])
+                        combat_result = combat(player["id"], monster["id"])
+                        if combat_result:
+                            monsters = [x for x in monsters if x.get("id") != monster["id"]]
+                        elif combat_result == False:
+                            allow_game = False
+                            print("Hävisit pelin, sinun HP loppui kesken")
                     else:
                         closest_airport = game_functions.select_closest_airports(1, player["cordinates"])
                         player = creatures.move_entity(player, closest_airport["airport_icao"], 1)
                 elif player_action == "T":
                     print("Hyökkäät hirviön kimppuun")
-                    combat(player["id"], monster["id"])
+                    combat_result = combat(player["id"], monster["id"])
+                    if combat_result == True:
+                        monsters = [x for x in monsters if x.get("id") != monster["id"]]
         probes = game_functions.probe_interaction(monsters)
         #Hakee ensimmäisen arvon määrä lentokenttiä
         airports = game_functions.select_closest_airports(8, player['cordinates'])
@@ -58,6 +73,7 @@ def play():
                     print(select_specific_player(player["id"]))
             else:
                 print("Wrong answer")
+            
             print("ZZZ...")
         else:
             print("Move invalid input")

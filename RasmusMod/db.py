@@ -189,7 +189,7 @@ def update_player_health(id, health_change):
     db = db_connection()
     select_player_query = f"SELECT current_health FROM player WHERE player_id = %s"
     cursor = db.cursor(dictionary=True)
-    cursor.execute(select_player_query, (id))
+    cursor.execute(select_player_query, (id, ))
     query_return = cursor.fetchone()
     new_health = query_return["current_health"] + (health_change)
     update_player_query = f"UPDATE player SET current_health = %s WHERE player_id = %s"
@@ -290,7 +290,7 @@ def select_random_creature():
 #Hakee hirviön käyttäen id arvoa"
 def select_specific_creature(id):
     db = db_connection()
-    specific_creature_query = f"SELECT game_creatures.id AS id, game_creatures.creature_current_health AS health, creature.creature_damage AS damage, creature.creature_name AS name FROM game_creatures INNER JOIN creature ON game_creatures.creature_id = creature.creature_id WHERE game_creatures.id = %s LIMIT 1"
+    specific_creature_query = f"SELECT game_creatures.id AS id, game_creatures.creature_current_health AS health, game_creatures.creature_captured AS status, creature.creature_damage AS damage, creature.creature_name AS name FROM game_creatures INNER JOIN creature ON game_creatures.creature_id = creature.creature_id WHERE game_creatures.id = %s LIMIT 1"
     try: 
         cursor = db.cursor(dictionary=True)
         cursor.execute(specific_creature_query, (id, ))
@@ -340,7 +340,7 @@ def update_creature_health(id, health_change):
     update_creature_query = f"UPDATE game_creatures SET creature_current_health = %s WHERE id = %s"
     try: 
         cursor = db.cursor(dictionary=True)
-        cursor.execute(update_creature_query, (new_health, id))
+        cursor.execute(update_creature_query, (new_health, id, ))
         db.commit()
         if cursor.rowcount > 0:
             return True
@@ -356,16 +356,15 @@ def update_creature_health(id, health_change):
 
 def update_creature_captured_status(id, status_change):
     db = db_connection()
-    update_player_query = f"UPDATE creature SET current_health = %s WHERE id = %s"
+    update_player_query = f"UPDATE game_creature SET creature_captured = %s WHERE id = %s"
     try: 
         cursor = db.cursor(dictionary=True)
-        cursor.execute(update_player_query, (new_health, id))
+        cursor.execute(update_player_query, (status_change, id))
         db.commit()
         if cursor.rowcount > 0:
-            print(f"{creature["name"]} health is now {new_health}")
             return True
         else:
-            print("DEBUG: Error in updating player health")
+            print("DEBUG: Error in updating creature captured status")
             return False
     except mysql.connector.Error as err:
         print(f"Virhe: {err}")
